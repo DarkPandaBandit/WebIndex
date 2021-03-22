@@ -1,8 +1,7 @@
 #!/bin/bash
 
-echo please insert web address to scrape.
 
-echo Web_Address:
+echo please insert web address to scrape.
 
 read Web_Address
 
@@ -10,9 +9,10 @@ wget $Web_Address
 
 cat index.html | grep "href=" | cut -f3 -d "/" | grep "\." | cut -f1 -d '"' | sort -u >> website.txt
 
-for index.html in .1 .2 .3 .4 .5 .6 .7 .8 .10
-do
-  grep "href=" | cut -f3 -d "/" | grep "\." | cut -f1 -d '"' | sort -u
-done
+index=(index.html.*)
+for index in "${index[@]}"; do grep "href=" | cut -f3 -d "/" | grep "\." | cut -f1 -d '"' | sort -u >> website.txt; done
+
 
 cat website.txt
+
+for url in $(cat website.txt); do host $url; done | grep "has address" | cut -f4 -d "" | sort -u >> DomainIPs.txt
